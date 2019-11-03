@@ -15,13 +15,13 @@ All CSV files with the separators ";" ":" "," are accepted. When saving, a separ
 2. Select the second CSV file
 3. Select the column in the first CSV file which should be compared
 4. Select the column in the second CSV file which should be compared
-5. Set the maximum distance (default is 5)
+5. Set the maximum distance (default value is five)
 6. Click the button "Compare and Merge" and then choose a destination and  a name for the file
 7. Wait and be happy
 
 ## Thanks
 
-The software uses the [StringSimilarity.NET](https://github.com/feature23/StringSimilarity.NET) libary from [feature23](https://github.com/feature23) and the [MetroFramework](https://github.com/thielj/MetroFramework) from [thielj](https://github.com/thielj).
+The software uses the [StringSimilarity.NET](https://github.com/feature23/StringSimilarity.NET) library from [feature23](https://github.com/feature23) and the [MetroFramework](https://github.com/thielj/MetroFramework) from [thielj](https://github.com/thielj).
 
 ## License
 
