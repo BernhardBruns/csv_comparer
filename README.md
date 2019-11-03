@@ -2,7 +2,7 @@
 
 The "CSV String Comparer" is a little tool which compares and merges two CSV files based on the data from a specific selected column in each file. 
 
-![CSV_String_Comparer](\CSV_Comparer\res\csv_comparer.png)
+![CSV_String_Comparer](CSV_Comparer\res\csv_comparer.png)
 
 The comparison of the two CSV files is based on the [Q-gram](https://github.com/feature23/StringSimilarity.NET#shingle-n-gram-based-algorithms) (q=1) distance. The rows with the best distance in each file will be merged except that the distance is smaller than the maximum distance which is choosen. 
 
