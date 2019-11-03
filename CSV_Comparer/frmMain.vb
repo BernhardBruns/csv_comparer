@@ -1,8 +1,30 @@
 ﻿Imports System.IO
+Imports System.Text
 Imports System.Threading
 Imports F23.StringSimilarity
 
 Public Class frmMain
+
+    '    MetroFramework - Windows Modern UI for .NET WinForms Applications
+
+    'Copyright (c) 2013 Jens Thiel, http//thielj.github.com/MetroFramework
+
+    'Permission Is hereby granted, free of charge, to any person obtaining a copy of 
+    'this software And associated documentation files (the "Software"), To deal In the 
+    'Software without restriction, including without limitation the rights To use, copy, 
+    'modify, merge, publish, distribute, sublicense, And/Or sell copies of the Software, 
+    'And to permit persons to whom the Software Is furnished to do so, subject to the 
+    'following conditions:
+
+    'The above copyright notice And this permission notice shall be included In 
+    'all copies Or substantial portions Of the Software.
+
+    'THE SOFTWARE Is PROVIDED "AS IS", WITHOUT WARRANTY Of ANY KIND, EXPRESS Or IMPLIED, 
+    'INCLUDING BUT Not LIMITED To THE WARRANTIES Of MERCHANTABILITY, FITNESS For A 
+    'PARTICULAR PURPOSE And NONINFRINGEMENT. In NO Event SHALL THE AUTHORS Or COPYRIGHT 
+    'HOLDERS BE LIABLE For ANY CLAIM, DAMAGES Or OTHER LIABILITY, WHETHER In AN ACTION Of 
+    'CONTRACT, TORT Or OTHERWISE, ARISING FROM, OUT OF Or IN CONNECTION WITH THE SOFTWARE 
+    'Or THE USE Or OTHER DEALINGS IN THE SOFTWARE.
 
     Dim m_CSV1()() As String
     Dim m_CSV2()() As String
@@ -18,7 +40,7 @@ Public Class frmMain
         cboCSV1.SelectedIndex = 0
         cboCSV2.SelectedIndex = 0
 
-        If tbValue.Value = 20 Then
+        If tbValue.Value = 10 Then
             MetroToolTip1.SetToolTip(tbValue, "max. distance: infinity")
         Else
             MetroToolTip1.SetToolTip(tbValue, "max. distance: " & tbValue.Value)
@@ -29,7 +51,7 @@ Public Class frmMain
 
     Private Sub tbValue_MouseUp(sender As Object, e As MouseEventArgs) Handles tbValue.MouseUp
 
-        If tbValue.Value = 20 Then
+        If tbValue.Value = 10 Then
             MetroToolTip1.SetToolTip(tbValue, "max. distance: infinity")
             MetroToolTip1.Show("max. distance:  infinity", tbValue)
         Else
@@ -40,14 +62,30 @@ Public Class frmMain
 
     End Sub
 
-    Public Function ReadCSV(ByVal datei As String) As String()()
+
+    Public Function ReadCSV(ByVal file As String) As String()()
 
         Dim comma, semicolon, colon As Integer
 
 
-        If File.Exists(datei) Then
-            Dim lines As String() = File.ReadAllLines(datei)
+        If IO.File.Exists(file) Then
+
+            Dim lines As String() = IO.File.ReadAllLines(file)
+
+            'Solution for the Encoding-Problem
+            For Each l In lines
+                If l.Contains("�") Then
+                    lines = IO.File.ReadAllLines(file, Encoding.Default)
+                    Exit For
+                End If
+            Next
+
+
             Dim parts As String()() = New String(lines.Length - 1)() {}
+
+
+            ' Get separator and check if each row in the csv have the same amount of separator. 
+            Dim max, tmp As Integer
 
             For i As Integer = 0 To lines.Length - 1
                 If i = 0 Then
@@ -62,7 +100,27 @@ Public Class frmMain
                     Else
                         m_Separator = ":"
                     End If
+
+                    max = lines(i).Split(m_Separator).Count
                 End If
+
+                tmp = lines(i).Split(m_Separator).Count
+
+                If tmp > max Then
+                    max = tmp
+                End If
+
+            Next
+
+            For i = 0 To lines.Length - 1
+
+                'Add separator in row [i] if the amount is lower than the max amount of separator in a specific row in the csv
+                Dim c As Integer = lines(i).Split(m_Separator).Count
+                For j = c To max - 1
+                    lines(i) = lines(i) & m_Separator
+                Next
+
+                'Split in two dimension array
                 parts(i) = lines(i).Split(m_Separator)
             Next
 
@@ -157,11 +215,6 @@ Public Class frmMain
                 m_thread.SetApartmentState(ApartmentState.STA)
                 m_thread.Start()
 
-
-
-
-
-
             End If
         End If
 
@@ -170,7 +223,50 @@ Public Class frmMain
 
     Private Sub Compare()
 
+        'The MIT License (MIT)
 
+        'Copyright(c) 2015 feature[23]
+
+        'Permission Is hereby granted, free Of charge, to any person obtaining a copy
+        'of this software And associated documentation files (the "Software"), to deal
+        'in the Software without restriction, including without limitation the rights
+        'to use, copy, modify, merge, publish, distribute, sublicense, And/Or sell
+        'copies of the Software, And to permit persons to whom the Software Is
+        'furnished to do so, subject to the following conditions
+
+        'The above copyright notice And this permission notice shall be included in all
+        'copies Or substantial portions of the Software.
+
+        'THE SOFTWARE Is PROVIDED "AS IS", WITHOUT WARRANTY Of ANY KIND, EXPRESS Or
+        'IMPLIED, INCLUDING BUT Not LIMITED To THE WARRANTIES Of MERCHANTABILITY,
+        'FITNESS FOR A PARTICULAR PURPOSE And NONINFRINGEMENT. IN NO EVENT SHALL THE
+        'AUTHORS Or COPYRIGHT HOLDERS BE LIABLE For ANY CLAIM, DAMAGES Or OTHER
+        'LIABILITY, WHETHER In AN ACTION Of CONTRACT, TORT Or OTHERWISE, ARISING FROM,
+        'OUT OF Or IN CONNECTION WITH THE SOFTWARE Or THE USE Or OTHER DEALINGS IN THE
+        'SOFTWARE.
+
+        'Portions of this code are licensed And copyright as follows
+
+        'Copyright 2015 Thibault Debatty.
+
+        'Permission Is hereby granted, free Of charge, to any person obtaining
+        'a copy of this software And associated documentation files (the
+        '"Software"), to deal in the Software without restriction, including
+        'without limitation the rights To use, copy, modify, merge, publish,
+        'distribute, sublicense, And/Or sell copies Of the Software, And to
+        'permit persons To whom the Software Is furnished To Do so, subject to
+        'the following conditions
+
+        'The above copyright notice And this permission notice shall be
+        'included in all copies Or substantial portions of the Software.
+
+        'THE SOFTWARE Is PROVIDED "AS IS", WITHOUT WARRANTY Of ANY KIND,
+        'EXPRESS Or IMPLIED, INCLUDING BUT Not LIMITED TO THE WARRANTIES OF
+        'MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE And
+        'NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS Or COPYRIGHT HOLDERS BE
+        'LIABLE FOR ANY CLAIM, DAMAGES Or OTHER LIABILITY, WHETHER IN AN ACTION
+        'OF CONTRACT, TORT Or OTHERWISE, ARISING FROM, OUT OF Or IN CONNECTION
+        'With THE SOFTWARE Or THE USE Or OTHER DEALINGS In THE SOFTWARE.
 
         Dim cp As New QGram(1)
         Dim result()() As Integer = New Integer(m_CSV1.Length - 1)() {}
@@ -206,6 +302,8 @@ Public Class frmMain
                 s2 = m_CSV2(j - 1)(m_Column2 - 1)
 
                 currentDistance = cp.Distance(s1, s2)
+
+                '  Console.WriteLine(s1 & " >> " & s2 & " >> " & currentDistance.ToString)
 
                 If currentDistance <= distance Then
 
@@ -300,13 +398,12 @@ Public Class frmMain
 
         For i As Integer = 0 To in_S1.Length - 1
             list.Add(in_S1(i))
-
         Next
 
         For i As Integer = 0 To in_S2.Length - 1
-
             list.Add(in_S2(i))
         Next
+
         Dim array3 As String() = list.ToArray()
         Return array3
 
@@ -315,20 +412,29 @@ Public Class frmMain
 
 
     Private Sub SaveCSV(ByVal in_Path As String, ByVal in_String()() As String, ByVal in_Separator As Char)
-        Dim file As StreamWriter = New StreamWriter(in_Path)
+        Dim file As New FileStream(in_Path, FileMode.Create, FileAccess.ReadWrite)
+        Dim stream As StreamWriter = New StreamWriter(file, Encoding.Default)
+        Try
 
-        For i = 0 To in_String.Length - 1
-            For j = 0 To in_String(i).Length - 1
-                file.Write(in_String(i)(j))
 
-                If j < (in_String(i).Length - 1) Then
-                    file.Write(in_Separator)
-                End If
+            For i = 0 To in_String.Length - 1
+                For j = 0 To in_String(i).Length - 1
+                    stream.Write(in_String(i)(j))
 
+                    If j < (in_String(i).Length - 1) Then
+                        stream.Write(in_Separator)
+                    End If
+
+                Next
+                stream.Write(vbLf)
             Next
-            file.Write(vbLf)
-        Next
-        file.Close()
+
+        Catch ex As Exception
+
+        Finally
+            Stream.Close()
+        End Try
+
 
     End Sub
 End Class

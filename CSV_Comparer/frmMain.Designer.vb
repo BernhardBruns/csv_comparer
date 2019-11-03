@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmMain
     Inherits MetroFramework.Forms.MetroForm
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class frmMain
     'Hinweis: Die folgende Prozedur ist für den Windows Form-Designer erforderlich.
     'Das Bearbeiten ist mit dem Windows Form-Designer möglich.  
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.tbValue = New MetroFramework.Controls.MetroTrackBar()
@@ -33,20 +33,20 @@ Partial Class frmMain
         Me.mpWaiting = New MetroFramework.Controls.MetroPanel()
         Me.MetroLabel1 = New MetroFramework.Controls.MetroLabel()
         Me.MetroProgressBar1 = New MetroFramework.Controls.MetroProgressBar()
-        Me.mpWaiting.SuspendLayout
-        Me.SuspendLayout
+        Me.mpWaiting.SuspendLayout()
+        Me.SuspendLayout()
         '
         'tbValue
         '
         Me.tbValue.BackColor = System.Drawing.Color.Transparent
         Me.tbValue.Location = New System.Drawing.Point(23, 176)
-        Me.tbValue.Maximum = 20
+        Me.tbValue.Maximum = 10
         Me.tbValue.Name = "tbValue"
         Me.tbValue.Size = New System.Drawing.Size(393, 23)
         Me.tbValue.TabIndex = 3
         Me.tbValue.Text = "MetroTrackBar1"
         Me.MetroToolTip1.SetToolTip(Me.tbValue, "similarity")
-        Me.tbValue.Value = 10
+        Me.tbValue.Value = 5
         '
         'btnCompare
         '
@@ -157,7 +157,7 @@ Partial Class frmMain
         Me.Resizable = False
         Me.Text = "CSV String Comparer"
         Me.mpWaiting.ResumeLayout(False)
-        Me.mpWaiting.PerformLayout
+        Me.mpWaiting.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
